@@ -30,7 +30,7 @@ from sklearn.metrics import confusion_matrix,accuracy_score
 import warnings
 warnings.filterwarnings("ignore")
 
-from ssaip.alservice import ALServiceBase
+from ahunt.alservice import ALServiceBase
 
 TRANSFORM_TRAIN = transforms.Compose([
     # transforms.ToPILImage(),

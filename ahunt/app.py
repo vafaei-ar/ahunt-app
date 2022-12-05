@@ -12,17 +12,17 @@ from zipfile import ZipFile
 #from tf_keras_vis.scorecam import ScoreCAM
 #from tf_keras_vis.gradcam import Gradcam,GradcamPlusPlus
 # from scipy.ndimage import gaussian_filter as gauss
-from ssaip import *
+from ahunt import *
 # import models
 #import easygui
 
 
-import ssaip
-dirname = path = os.path.dirname(ssaip.__file__)
+import ahunt
+dirname = path = os.path.dirname(ahunt.__file__)
 
 #st.set_page_config(layout="wide")
 
-session_state = get(dirname=None,reset_model=True)
+session_state = st.session_state #get(dirname=None,reset_model=True)
 
 
 st.sidebar.image(os.path.join(dirname,'media/logo.png'), use_column_width=True)

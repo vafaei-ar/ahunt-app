@@ -1,7 +1,6 @@
-# ahunt-pipelin
-Active learning HUman in the loop aNomaly deTection. 
+# streamlit-pipelin
+Active learning pipeline. 
 
-<img src="ahunt/media/logo.png" alt="drawing" width="150"/>
 
 ## Installation
 

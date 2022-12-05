@@ -4,9 +4,10 @@
 import os
 import re
 import sys
-from streamlit.cli import main
-import ssaip
-dirname = path = os.path.dirname(ssaip.__file__)
+from streamlit.web.cli import main
+import ahunt
+
+dirname = path = os.path.dirname(ahunt.__file__)
 
 if len(sys.argv)==2:
     port = int(sys.argv[1])

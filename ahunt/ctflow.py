@@ -24,7 +24,7 @@ from tensorflow.keras.preprocessing.image import ImageDataGenerator
 import warnings
 warnings.filterwarnings("ignore")
 
-from ssaip.alservice import ALServiceBase
+from ahunt.alservice import ALServiceBase
 
 
 class ALServiceTFlow(ALServiceBase):
@@ -75,6 +75,8 @@ class ALServiceTFlow(ALServiceBase):
         train_labels = [i[1] for i in self.imgs]
 
         train_images = np.array(train_images)
+        if train_images.ndim==3:
+            train_images = np.expand_dims(train_images,-1)
         train_labels = np.array(train_labels)
         print(train_images.shape,train_labels.shape)
 

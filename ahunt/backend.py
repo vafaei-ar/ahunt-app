@@ -23,7 +23,7 @@ def set_new_labels(session_state, default_labels='label1, label2, ...'):
             session_state.df.index.name = 'path'
             # session_state.df.set_index('images', drop=True, append=False, inplace=False, verify_integrity=True)
             session_state.labeler_config['labels'] = labels
-            os.mkdir(os.path.join(data_path,'als_files'))
+            os.makedirs(os.path.join(data_path,'als_files'), exist_ok=True)
             session_state.success = True
             st.experimental_rerun()
 
@@ -82,13 +82,13 @@ def imageshow_setstate(session_state):
         set_new_labels(session_state)
 
     if False:
-        from ssaip.ctorch import ALServiceTorch
+        from ahunt.ctorch import ALServiceTorch
         session_state.als = ALServiceTorch(root_dir = data_path,
                                         csv_file = None,
                                         session = session_state,
                                         st = None)
     else:
-        from ssaip.ctflow import ALServiceTFlow
+        from ahunt.ctflow import ALServiceTFlow
         session_state.als_config = {'batch_size':32,'autotrain':False,'model_name':'VGG19'}
         session_state.als = ALServiceTFlow(root_dir = data_path,
                                            csv_file = None,
@@ -158,7 +158,7 @@ def imageshow(session_state):
         image = os.path.join(data_path,images[session_state.ishow])
         # print(image)
         # results_raw = class_labeler(image)
-        st.image(image)
+        col1.image(image,use_column_width=True)
 
 
 MODEL_LIST = ['DenseNet121', 'DenseNet169', 'DenseNet201', 'EfficientNetB0', 'EfficientNetB1',
@@ -194,7 +194,7 @@ def imageshow_label(session_state):
         session_state.als_config['autotrain'] = autotrain
         
         if st.sidebar.button('apply'):
-            from ssaip.ctflow import ALServiceTFlow
+            from ahunt.ctflow import ALServiceTFlow
             session_state.als = ALServiceTFlow(root_dir = session_state.labeler_config['data_path'],
                                                csv_file = None,
                                                als_config = session_state.als_config,
