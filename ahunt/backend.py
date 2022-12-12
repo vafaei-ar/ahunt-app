@@ -30,41 +30,34 @@ def set_new_labels(session_state, default_labels='label1, label2, ...'):
             st.experimental_rerun()
 
 
-    st.write('Here are some examples:')
-    fig,axes = make_thumbnail_examples(data_path)
-    st.pyplot(fig)
+    if st.button('Plot some examples'):
+        st.write('Here are some random examples in the data:')
+        fig,axes = make_thumbnail_examples(data_path,n_images_at_side=5)
+        st.pyplot(fig)
 
 import os
 import random
 import matplotlib.pyplot as plt
 
-def make_thumbnail_examples(path_to_directory: str) -> None:
+def make_thumbnail_examples(path_to_directory: str, n_images_at_side: int) -> None:
     # Get the list of all files in the specified directory
     files = os.listdir(path_to_directory)
-    
     # Choose a random subset of the files
-    random_files = random.sample(files, min(len(files), 9))
-    
-    # Create a figure with 3 rows and 3 columns
-    fig, axes = plt.subplots(3, 3, figsize=(8, 8))
-    
+    random_files = random.sample(files, min(len(files), n_images_at_side**2))
+    # Create a figure with n_images_at_side rows and n_images_at_side columns
+    fig, axes = plt.subplots(n_images_at_side, n_images_at_side, figsize=(8, 8))
     # Loop over the randomly selected files
     for i, fname in enumerate(random_files):
         # Load the image
         img = plt.imread(os.path.join(path_to_directory, fname))
-        
         # Select the subplot to use
-        r, c = divmod(i, 3)
+        r, c = divmod(i, n_images_at_side)
         ax = axes[r, c]
-        
         # Display the image on the subplot
         ax.imshow(img)
-        
         # Remove the axis labels and ticks
         ax.set_xticks([])
         ax.set_yticks([])
-    
-    # Show the figure
     return fig,axes
 
 def get_images_list(data_path):
