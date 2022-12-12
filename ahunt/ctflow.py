@@ -94,8 +94,8 @@ class ALServiceTFlow(ALServiceBase):
         n_class = len(np.unique(train_labels))+1
         train_images = np.array(train_images)
         train_labels = np.array(train_labels)
-        print(train_images.shape,train_labels.shape)
         y_train = tf.keras.utils.to_categorical(train_labels,num_classes=n_class)
+        print(train_images.shape,train_labels.shape)
         aug = ImageDataGenerator(rotation_range = 10,
                                 width_shift_range = 0.1,
                                 height_shift_range = 0.1,
@@ -115,8 +115,8 @@ class ALServiceTFlow(ALServiceBase):
             valid_labels = [i[1] for i in valid_imgs]
             valid_images = np.array(valid_images)
             valid_labels = np.array(valid_labels)
-            print(valid_images.shape,valid_labels.shape)
             valid_labels = tf.keras.utils.to_categorical(valid_labels,num_classes=n_class)
+            print(valid_images.shape,valid_labels.shape)
             validation_data = (valid_images,valid_labels)
         else:
             validation_data = None
