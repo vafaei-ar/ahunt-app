@@ -4,7 +4,7 @@ import streamlit as st
 import logging
 
 # Set up logger
-log.basicConfig(
+logging.basicConfig(
     level=log.INFO,
     format='%(asctime)s %(message)s',
     datefmt='%Y/%m/%d %I:%M:%S %p',
