@@ -236,10 +236,11 @@ MODEL_LIST = ['DenseNet121', 'DenseNet169', 'DenseNet201', 'EfficientNetB0', 'Ef
               'ResNetRS50', 'VGG16', 'VGG19', 'Xception']
 
 def imageshow_label(session_state):
+    options = ['reserved']+session_state.labeler_config['labels']
     interest = st.selectbox(
                 label = "Set your interest",
-                options = ['reserved']+session_state.labeler_config['labels'],
-                index = session_state.interest,
+                options = options,
+                index = options.index(session_state.interest),
                 # key = '10001'
             )
     session_state.interest = interest
