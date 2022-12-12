@@ -5,8 +5,8 @@ import pandas as pd
 from glob import glob
 from time import sleep
 import streamlit as st
+from shutil import rmtree
 from datetime import datetime
-from shutil import import rmtree
 from ahunt.utils import LOGGER
 
 def set_new_labels(session_state, default_labels='label1, label2, ...'):
