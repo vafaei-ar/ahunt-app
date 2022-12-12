@@ -304,7 +304,7 @@ def build_model(imodel,shape, n_class, n_latent=16,comp=True):
         print(mdl)
 
         if shape[2]==3:
-            baseModel = tf.keras.Model(weights="imagenet", include_top=False,
+            baseModel = Model(weights="imagenet", include_top=False,
                                                        input_tensor=tf.keras.layers.Input(shape=shape))
 
         #     baseModel = tf.keras.applications.MobileNetV3Small(alpha=1.0, minimalistic=True,
@@ -319,7 +319,7 @@ def build_model(imodel,shape, n_class, n_latent=16,comp=True):
             headModel = baseModel.output
         else:
             inputs = layers.Input(shape=shape, name="img")
-            baseModel = tf.keras.Model(weights="imagenet", include_top=False,
+            baseModel = Model(weights="imagenet", include_top=False,
                                                        input_tensor=tf.keras.layers.Input(shape=(shape[0],shape[1],3)))
 
         #     baseModel = tf.keras.applications.MobileNetV3Small(alpha=1.0, minimalistic=True,
