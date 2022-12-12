@@ -122,16 +122,8 @@ class ALServiceTFlow(ALServiceBase):
                                 fill_mode="nearest")
         n_class,class_labels, nums = describe_labels(y_train,verbose=1)
         train_images,y_train = balance_aug(train_images,y_train,aug=aug)
-        n_class,class_labels, nums = describe_labels(y_train,verbose=1)
-                
+        n_class,class_labels, nums = describe_labels(y_train,verbose=1)                
         train_data = aug.flow(train_images, y_train, batch_size=batch_size)
-
-        loss = tf.keras.losses.CategoricalCrossentropy(from_logits=0)
-        lr_schedule = tf.keras.optimizers.schedules.ExponentialDecay(
-                                    initial_learning_rate=1e-3,
-                                    decay_steps=50,
-                                    decay_rate=0.95)
-        opt = tf.keras.optimizers.Adam(learning_rate=lr_schedule)
 
         if os.path.exists(model_path):
             model = keras.models.load_model(model_path)
@@ -140,7 +132,7 @@ class ALServiceTFlow(ALServiceBase):
             if n_class>model.output.shape[-1]:
                 model = add_class(clf = model,drt = encoder,n_class = n_class,summary=0)
                 st.write('new class added!')
-                st.write(model.summary())
+                print(model.summary())
             else:
                 st.write(f'number of classes: {n_class}, model output: {model.output.shape[-1]}')
         else:
@@ -150,7 +142,14 @@ class ALServiceTFlow(ALServiceBase):
                                                 n_latent=16,
                                                 comp=False)
 
+        loss = tf.keras.losses.CategoricalCrossentropy(from_logits=0)
+        lr_schedule = tf.keras.optimizers.schedules.ExponentialDecay(
+                                    initial_learning_rate=1e-3,
+                                    decay_steps=5,
+                                    decay_rate=0.95)
+        opt = tf.keras.optimizers.Adam(learning_rate=lr_schedule)
         model.compile(loss=loss, optimizer=opt, metrics=["accuracy"])
+        print(model.summary())
         
         progress_bar = st.sidebar.progress(0)
         status_text = st.sidebar.empty()
