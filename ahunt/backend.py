@@ -259,7 +259,7 @@ def imageshow_label(session_state):
             st.sidebar.write('Changes applied!')    
         
     st.sidebar.write('current config is:')
-    st.sidebar.table(session_state.als.als_config)
+    st.sidebar.write(pd.DataFrame.from_dict(session_state.als.als_config))
 
     nimg = session_state.df.shape[0]
     if session_state.ishow<nimg or 1:
