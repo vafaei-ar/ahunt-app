@@ -29,6 +29,44 @@ def set_new_labels(session_state, default_labels='label1, label2, ...'):
             session_state.success = True
             st.experimental_rerun()
 
+
+    st.write('Here are some examples:')
+    fig,axs = make_thumbnail_examples(data_path)
+    st.pyplot(fig)
+
+import os
+import random
+import matplotlib.pyplot as plt
+
+def make_thumbnail_examples(path_to_directory: str) -> None:
+    # Get the list of all files in the specified directory
+    files = os.listdir(path_to_directory)
+    
+    # Choose a random subset of the files
+    random_files = random.sample(files, min(len(files), 9))
+    
+    # Create a figure with 3 rows and 3 columns
+    fig, axes = plt.subplots(3, 3, figsize=(8, 8))
+    
+    # Loop over the randomly selected files
+    for i, fname in enumerate(random_files):
+        # Load the image
+        img = plt.imread(os.path.join(path_to_directory, fname))
+        
+        # Select the subplot to use
+        r, c = divmod(i, 3)
+        ax = axes[r, c]
+        
+        # Display the image on the subplot
+        ax.imshow(img)
+        
+        # Remove the axis labels and ticks
+        ax.set_xticks([])
+        ax.set_yticks([])
+    
+    # Show the figure
+    return fig,axs
+
 def get_images_list(data_path):
     images = glob(os.path.join(data_path,'*.jpg')) +\
              glob(os.path.join(data_path,'*.jpeg')) +\
