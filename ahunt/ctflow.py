@@ -95,7 +95,7 @@ class ALServiceTFlow(ALServiceBase):
         train_images = np.array(train_images)
         train_labels = np.array(train_labels)
         y_train = tf.keras.utils.to_categorical(train_labels,num_classes=n_class)
-        print(train_images.shape,train_labels.shape)
+        print(train_images.shape,y_train.shape,train_labels.shape)
         aug = ImageDataGenerator(rotation_range = 10,
                                 width_shift_range = 0.1,
                                 height_shift_range = 0.1,
