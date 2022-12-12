@@ -137,6 +137,8 @@ class ALServiceTFlow(ALServiceBase):
                 model = add_class(clf = model,drt = encoder,n_class = n_class,summary=0)
                 st.write('new class added!')
                 st.write(model.summary())
+            else:
+                st.write(f'number of classes: {n_class}, model output: {model.output.shape[-1]}')
         else:
             model,encoder,model_name = build_model(imodel=model_name,
                                                 shape=train_images.shape[1:],
