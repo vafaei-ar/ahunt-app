@@ -6,6 +6,7 @@ from glob import glob
 from time import sleep
 import streamlit as st
 from datetime import datetime
+from ahunt.utils import LOGGER
 
 def set_new_labels(session_state, default_labels='label1, label2, ...'):
     data_path = session_state.labeler_config['data_path']
