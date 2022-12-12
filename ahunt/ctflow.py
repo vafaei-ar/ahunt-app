@@ -16,6 +16,7 @@ from tensorflow.keras.preprocessing.image import ImageDataGenerator
 
 # Ignore warnings
 import mlflow
+import mlflow.keras
 import logging
 import warnings
 from uuid import uuid4
