@@ -31,7 +31,7 @@ def set_new_labels(session_state, default_labels='label1, label2, ...'):
 
 
     st.write('Here are some examples:')
-    fig,axs = make_thumbnail_examples(data_path)
+    fig,axes = make_thumbnail_examples(data_path)
     st.pyplot(fig)
 
 import os
@@ -65,7 +65,7 @@ def make_thumbnail_examples(path_to_directory: str) -> None:
         ax.set_yticks([])
     
     # Show the figure
-    return fig,axs
+    return fig,axes
 
 def get_images_list(data_path):
     images = glob(os.path.join(data_path,'*.jpg')) +\
