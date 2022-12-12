@@ -17,13 +17,12 @@ from tensorflow.keras.preprocessing.image import ImageDataGenerator
 # Ignore warnings
 import mlflow
 import mlflow.keras
-import logging
 import warnings
 from uuid import uuid4
 from datetime import datetime
 warnings.filterwarnings("ignore")
 from ahunt.alservice import ALServiceBase
-
+from ahunt.utils import LOGGER
 
 class ALServiceTFlow(ALServiceBase):
 
@@ -71,6 +70,8 @@ class ALServiceTFlow(ALServiceBase):
             self.classes = sorted(self.classes)
             self.class_to_idx = {j:i for i,j in enumerate(self.classes)}
             np.save(cidx_pat,self.classes)
+        
+        LOGGER.info(self.class_to_idx)
         
         int_labels = dataframe['label'].apply(lambda i:self.class_to_idx[i]).values
         train_filt = (df['is_train']==1).values

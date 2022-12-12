@@ -182,6 +182,7 @@ def imageshow(session_state):
             # Every form must have a submit button.
             submitted = st.form_submit_button("Submit")
             if submitted:
+                LOGGER.info(f'{label} submitted')
                 image = images[session_state.ishow]
                 # session_state.df.loc[session_state.ishow,'images'] = MODEL_LISTimage
                 session_state.df.loc[image,'label'] = label
@@ -202,6 +203,7 @@ def imageshow(session_state):
                 session_state.df.loc[image,'label'] = new_class
                 session_state.df.loc[image,'date-time'] = \
                     datetime.now().strftime("%d/%m/%Y %H:%M:%S")
+                session_state.df.loc[image,'is_train'] = 1.
                 session_state.df.to_csv(os.path.join(data_path,'als_files','labels.csv'),index=0)
                 # session_state.ishow = session_state.ishow+1
                 session_state.ishow = next_question(session_state.df)

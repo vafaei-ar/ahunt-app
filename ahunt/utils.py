@@ -1,6 +1,20 @@
 
 import streamlit as st
 
+import logging
+
+# Set up logger
+log.basicConfig(
+    level=log.INFO,
+    format='%(asctime)s %(message)s',
+    datefmt='%Y/%m/%d %I:%M:%S %p',
+    handlers=[
+        log.FileHandler(resultsPath + '/LOGS.log', 'w'),
+        log.StreamHandler(sys.stdout)
+    ])
+LOGGER = log.getLogger()
+
+
 # try:
 #     from streamlit.scriptrunner import get_script_run_ctx
 # except ModuleNotFoundError:
