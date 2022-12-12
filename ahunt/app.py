@@ -38,11 +38,13 @@ if not hasattr(session_state,'labeler_config') or \
     not session_state.labeler_config.get('labels'):
     imageshow_setstate(session_state)
 elif session_state.success:
-    tab1, tab2 = st.tabs(["Labeler", "Database"])
+    tab1, tab2, tab3 = st.tabs(["Labeler", "History", "Analysis"])
     with tab1:
         imageshow_label(session_state)
     with tab2:
         st.write(session_state.df)
+    with tab3:
+        analysis(session_state)
 else:
     del session_state.labeler_config
     st.write('Something went wrong!')
