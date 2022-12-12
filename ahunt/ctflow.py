@@ -55,13 +55,13 @@ class ALServiceTFlow(ALServiceBase):
         dataframe = df[~df['label'].isna()]
  
         cidx_pat = os.path.join(self.root_dir,'als_files','idx_to_class')
-        if os.path.exists(cidx_pat+'npy'):
-            cname_old = np.load(cidx_pat+'npy')
+        if os.path.exists(cidx_pat+'.npy'):
+            cname_old = np.load(cidx_pat+'.npy')
 #            cname_old = sorted(cname_old)
             cname_new = dataframe['label'].dropna().unique().tolist()
-            cname_new = sorted(cname_new)
+#            cname_new = sorted(cname_new)
             cname_diff = np.setdiff1d(cname_new,cname_old).tolist()
-            cname_diff = sorted(cname_diff)
+#            cname_diff = sorted(cname_diff)
             self.classes = cname_old+cname_diff
             self.class_to_idx = {j:i for i,j in enumerate(self.classes)}
             np.save(cidx_pat,self.classes)
