@@ -119,7 +119,7 @@ class ALServiceTFlow(ALServiceBase):
         train_images,y_train = balance_aug(train_images,y_train,aug=aug)
         n_class,class_labels, nums = describe_labels(y_train,verbose=1)
                 
-        train_data = self.aug.flow(train_images, y_train, batch_size=batch_size)
+        train_data = aug.flow(train_images, y_train, batch_size=batch_size)
 
         loss = tf.keras.losses.CategoricalCrossentropy(from_logits=0)
         lr_schedule = tf.keras.optimizers.schedules.ExponentialDecay(
