@@ -193,6 +193,7 @@ def imageshow(session_state):
                 session_state.df.to_csv(os.path.join(data_path,'als_files','labels.csv'))
                 # session_state.ishow = session_state.ishow+1
                 session_state.ishow = next_question(session_state.df)
+                st.experimental_rerun()
                 
         with st.form("newclass"):
             new_class = st.text_input('Add a new class if you need!.', 'new class')
