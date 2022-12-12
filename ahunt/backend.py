@@ -133,7 +133,7 @@ def imageshow_setstate(session_state):
                                         st = None)
     else:
         from ahunt.ctflow import ALServiceTFlow
-        session_state.als_config = {'batch_size':32,'autotrain':False,'model_name':'EfficientNetB1'}
+        session_state.als_config = {'batch_size':32,'autotrain':False,'model_name':'ResNet50V2'}
         session_state.als = ALServiceTFlow(root_dir = data_path,
                                            csv_file = None,
                                            als_config = session_state.als_config,
@@ -258,7 +258,8 @@ def imageshow_label(session_state):
                                                st = None)
             st.sidebar.write('Changes applied!')    
         
-    st.sidebar.write('current config is',session_state.als)
+    st.sidebar.write('current config is:')
+    st.sidebar.table(session_state.als)
 
     nimg = session_state.df.shape[0]
     if session_state.ishow<nimg or 1:
