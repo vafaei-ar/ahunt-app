@@ -1,16 +1,16 @@
 
-import streamlit as st
-
+import sys
 import logging
+#import streamlit as st
 
 # Set up logger
 logging.basicConfig(
-    level=log.INFO,
+    level=logging.INFO,
     format='%(asctime)s %(message)s',
     datefmt='%Y/%m/%d %I:%M:%S %p',
     handlers=[
-        log.FileHandler(resultsPath + '/LOGS.log', 'w'),
-        log.StreamHandler(sys.stdout)
+        logging.FileHandler(resultsPath + '/LOGS.log', 'w'),
+        logging.StreamHandler(sys.stdout)
     ])
 LOGGER = logging.getLogger()
 
