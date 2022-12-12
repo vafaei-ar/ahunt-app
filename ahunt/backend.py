@@ -40,7 +40,7 @@ def imageshow_setstate(session_state):
     
     session_state.success = False
     data_path = st.text_input('Please Enter the path to the data directory.',
-                              '/home/developer/workspace/data/dental/gingival-recession/images')
+                              './images')
     images = get_images_list(data_path)
     images = [os.path.split(i)[1] for i in images]
     # images = images
@@ -94,13 +94,13 @@ def imageshow_setstate(session_state):
         set_new_labels(session_state)
 
     if False:
-        from ssaip.ctorch import ALServiceTorch
+        from ahunt.ctorch import ALServiceTorch
         session_state.als = ALServiceTorch(root_dir = data_path,
                                         csv_file = None,
                                         session = session_state,
                                         st = None)
     else:
-        from ssaip.ctflow import ALServiceTFlow
+        from ahunt.ctflow import ALServiceTFlow
         session_state.als_config = {'batch_size':32,'autotrain':False,'model_name':'EfficientNetB1'}
         session_state.als = ALServiceTFlow(root_dir = data_path,
                                            csv_file = None,
@@ -216,7 +216,7 @@ def imageshow_label(session_state):
         session_state.als_config['autotrain'] = autotrain
         
         if st.sidebar.button('apply'):
-            from ssaip.ctflow import ALServiceTFlow
+            from ahunt.ctflow import ALServiceTFlow
             session_state.als = ALServiceTFlow(root_dir = session_state.labeler_config['data_path'],
                                                csv_file = None,
                                                als_config = session_state.als_config,
