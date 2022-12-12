@@ -22,7 +22,7 @@ def set_new_labels(session_state, default_labels='label1, label2, ...'):
     if data_path and len(labels)>1:
         if st.button('Approve config'):
             session_state.ishow = 0
-            session_state.df = pd.DataFrame(index=images,columns=['label','predict','score','date-time','is_train'])
+            session_state.df = pd.DataFrame(index=images,columns=['label','predict','reserved','date-time','is_train'])
             session_state.df.index.name = 'path'
             # session_state.df.set_index('images', drop=True, append=False, inplace=False, verify_integrity=True)
             session_state.labeler_config['labels'] = labels
@@ -87,6 +87,7 @@ def imageshow_setstate(session_state):
         
     session_state.labeler_config = {'data_path' : data_path}
     session_state.labeler_config['trained_model'] = False
+    session_state.interest = 'reserved'
     
     csv_file = os.path.join(data_path,'als_files','labels.csv')
     if os.path.exists(csv_file):
@@ -234,6 +235,13 @@ MODEL_LIST = ['DenseNet121', 'DenseNet169', 'DenseNet201', 'EfficientNetB0', 'Ef
               'ResNetRS50', 'VGG16', 'VGG19', 'Xception']
 
 def imageshow_label(session_state):
+    interest = st.selectbox(
+                label = "Set your interest",
+                options = ['reserved']+session_state.labeler_config['labels'],
+                index = session_state.interest,
+                # key = '10001'
+            )
+    session_state.interest = interest
     if not session_state.als_config:
         session_state.als_config = {'batch_size':32,'autotrain':False,'model_name':'VGG19'}
     if st.sidebar.button('AL-service'):
@@ -301,14 +309,15 @@ def imageshow_label(session_state):
         del session_state.df
 
 def next_question(df):
-    filt = df['label'].isna().values
-    if df['score'].isna().values.all():
-        ishow = np.argwhere(filt)[0][0]
-    # elif df['label'].isna().sum()==0:
-    else:
-        index = df[filt]['score'].sort_values().index[0]
-        ishow = df.index.to_list().index(index)
+    interest = session_state.interest
 
+    if df['reserved'].isna().values.all():
+        ishow = np.argwhere(filt)[0][0]
+        return ishow
+
+    filt = df['label'].isna().values
+    index = df[filt][interest].sort_values().index[0]
+    ishow = df.index.to_list().index(index)
     return ishow
 
 def analysis(session_state):

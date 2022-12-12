@@ -64,14 +64,15 @@ class ALServiceTFlow(ALServiceBase):
             cname_diff = np.setdiff1d(cname_new,cname_old).tolist()
 #            cname_diff = sorted(cname_diff)
             self.classes = cname_old+cname_diff
-            self.class_to_idx = {j:i for i,j in enumerate(self.classes)}
+            # i=0 is for reserved class
+            self.class_to_idx = {j:i+1 for i,j in enumerate(self.classes)}
             np.save(cidx_pat,self.classes)
             LOGGER.info('old labels:',cname_old)
             LOGGER.info('new label(s):',cname_diff)
         else:
             self.classes = dataframe['label'].dropna().unique().tolist()
             self.classes = sorted(self.classes)
-            self.class_to_idx = {j:i for i,j in enumerate(self.classes)}
+            self.class_to_idx = {j:i+1 for i,j in enumerate(self.classes)}
             np.save(cidx_pat,self.classes)
         
         LOGGER.info(self.class_to_idx)
@@ -90,18 +91,19 @@ class ALServiceTFlow(ALServiceBase):
                             ).convert('RGB').resize((256,256))
                                    ) for i in train_imgs]
         train_labels = [i[1] for i in train_imgs]
+        n_class = len(np.unique(train_labels))+1
         train_images = np.array(train_images)
         train_labels = np.array(train_labels)
         print(train_images.shape,train_labels.shape)
-        y_train = tf.keras.utils.to_categorical(train_labels)
+        y_train = tf.keras.utils.to_categorical(train_labels,num_classes=n_class)
         aug = ImageDataGenerator(rotation_range = 10,
                                 width_shift_range = 0.1,
                                 height_shift_range = 0.1,
                                 zoom_range = 0.2,
                                 fill_mode="nearest")
-        n_class,class_labels, nums = describe_labels(y_train,verbose=1)
+        _,class_labels, nums = describe_labels(y_train,verbose=1)
         train_images,y_train = balance_aug(train_images,y_train,aug=aug)
-        n_class,class_labels, nums = describe_labels(y_train,verbose=1)                
+        _,class_labels, nums = describe_labels(y_train,verbose=1)                
         train_data = aug.flow(train_images, y_train, batch_size=batch_size)
 
         valid_images = [np.array(
@@ -227,9 +229,16 @@ class ALServiceTFlow(ALServiceBase):
         
         y_pred = np.array(y_pred)
         preds = np.argmax(y_pred,axis=1)
-        y_pred_names = [self.classes[i] for i in preds]
+        classesp = ['reserved']+self.classes
+        y_pred_names = [classesp[i] for i in preds]
         self.session.df['predict'] = y_pred_names
-        self.session.df['score'] = np.max(y_pred,axis=1)
+#        self.session.df['score'] = np.max(y_pred,axis=1)
+        
+        self.session.df['reserved'] = y_pred[:,0]
+#        self.session.df['probability'] = [','.join([str(j) for j in i]) for i in y_pred]
+        for i,cls in enumerate(self.classes):
+            self.session.df[cls] = y_pred[:,i]
+        
         self.session.df.to_csv(os.path.join(self.root_dir,'als_files','labels.csv'))
         st.sidebar.write('Done!')
 
