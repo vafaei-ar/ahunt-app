@@ -162,10 +162,13 @@ class ALServiceTFlow(ALServiceBase):
             metric_key = 'accuracy'
             lss1 = H.history['loss'][0]
             acc1 = H.history[metric_key][0]
-            lss2 = H.history['val_loss'][0]
-            acc2 = H.history['val_'+metric_key][0]
-        
-            df_acc = pd.DataFrame(columns=['train','valid'],data=[[acc1,acc2]])
+            
+            if H.history.get('val_loss'):
+                lss2 = H.history['val_loss'][0]
+                acc2 = H.history['val_'+metric_key][0]
+                df_acc = pd.DataFrame(columns=['train','valid'],data=[[acc1,acc2]])
+            else:
+                df_acc = pd.DataFrame(columns=['train'],data=[[acc1]])    
             if iepoch==0:
                 chart1 = st.sidebar.line_chart(df_acc)
                 tit = metric_key.replace('_',' ')
