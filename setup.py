@@ -16,7 +16,7 @@ except ImportError:
     from distutils.core import setup
 
 requires = [] #during runtime
-tests_require=['pytest>=3.0'] #for testing
+tests_require=['pytest>=3.0','pytorch-lightning','streamlit'] #for testing
 
 PACKAGE_PATH = os.path.abspath(os.path.join(__file__, os.pardir))
 
