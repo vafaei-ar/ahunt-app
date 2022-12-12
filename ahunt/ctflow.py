@@ -403,9 +403,10 @@ class MlflowCallback(tf.keras.callbacks.Callback):
             return
         # Log the metrics from Keras to MLflow     
         mlflow.log_metric('loss', logs['loss'], step=epoch)
-        mlflow.log_metric('val_loss', logs['val_loss'], step=epoch)
         mlflow.log_metric('accuracy', logs['accuracy'], step=epoch)
-        mlflow.log_metric('val_accuracy', logs['val_accuracy'], step=epoch)
+        if logs.get('val_loss'):
+            mlflow.log_metric('val_loss', logs['val_loss'], step=epoch)
+            mlflow.log_metric('val_accuracy', logs['val_accuracy'], step=epoch)
         
         # for il,l in enumerate(self.model.layers):
         #     try:
