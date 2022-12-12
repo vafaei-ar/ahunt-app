@@ -57,6 +57,7 @@ class ALServiceTFlow(ALServiceBase):
         cidx_pat = os.path.join(self.root_dir,'als_files','idx_to_class')
         if os.path.exists(cidx_pat+'.npy'):
             cname_old = np.load(cidx_pat+'.npy')
+            cname_old = list(cname_old)
 #            cname_old = sorted(cname_old)
             cname_new = dataframe['label'].dropna().unique().tolist()
 #            cname_new = sorted(cname_new)
