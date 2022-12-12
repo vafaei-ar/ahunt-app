@@ -6,6 +6,7 @@ from glob import glob
 from time import sleep
 import streamlit as st
 from datetime import datetime
+from shutil import import rmtree
 from ahunt.utils import LOGGER
 
 def set_new_labels(session_state, default_labels='label1, label2, ...'):
@@ -27,7 +28,7 @@ def set_new_labels(session_state, default_labels='label1, label2, ...'):
             # session_state.df.set_index('images', drop=True, append=False, inplace=False, verify_integrity=True)
             session_state.labeler_config['labels'] = labels
             alspath = os.path.join(data_path,'als_files')
-            if os.path.exists(alspath): os.remove(alspath)
+            if os.path.exists(alspath): rmtree(alspath)
             os.makedirs(alspath) #, exist_ok=True)
             session_state.success = True
             st.experimental_rerun()
