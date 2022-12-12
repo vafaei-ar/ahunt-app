@@ -12,7 +12,7 @@ logging.basicConfig(
         log.FileHandler(resultsPath + '/LOGS.log', 'w'),
         log.StreamHandler(sys.stdout)
     ])
-LOGGER = log.getLogger()
+LOGGER = logging.getLogger()
 
 
 # try:
