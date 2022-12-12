@@ -15,7 +15,7 @@ try:
 except ImportError:
     from distutils.core import setup
 
-requires = ['streamlit'] #during runtime
+requires = [] #during runtime
 tests_require=['pytest>=3.0'] #for testing
 
 PACKAGE_PATH = os.path.abspath(os.path.join(__file__, os.pardir))
