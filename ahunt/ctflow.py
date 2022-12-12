@@ -43,7 +43,7 @@ class ALServiceTFlow(ALServiceBase):
         autotrain = self.als_config['autotrain']
         model_name = self.als_config['model_name']
         checkpoints_dir = os.path.join(self.root_dir,'als_files','checkpoints')
-        model_path = os.path.join(checkpoints_dir,model_name+'.h5')
+        model_path = os.path.join(checkpoints_dir,model_name+'.tf')
         mlflow.set_tags({'model_path':model_path})
         os.makedirs(checkpoints_dir, exist_ok=True)
         
@@ -132,7 +132,7 @@ class ALServiceTFlow(ALServiceBase):
 
         if os.path.exists(model_path):
             model = keras.models.load_model(model_path)
-            encoder = keras.models.load_model(model_path.replace('.h5','_encoder.h5'))
+            encoder = keras.models.load_model(model_path.replace('.tf','_encoder.tf'))
             st.sidebar.write('Model exists, loaded!')
             if n_class>model.output.shape[-1]:
                 model = add_class(clf = model,drt = encoder,n_class = n_class,summary=0)
@@ -192,7 +192,7 @@ class ALServiceTFlow(ALServiceBase):
             #     chart2.add_rows(df_lss)
             
         model.save(model_path)
-        encoder.save(model_path.replace('.h5','_encoder.h5'))
+        encoder.save(model_path.replace('.tf','_encoder.tf'))
         mlflow.keras.log_model(model, model_name)
         mlflow.end_run()
         # for in df.index:
