@@ -15,7 +15,7 @@ try:
 except ImportError:
     from distutils.core import setup
 
-requires = ['pytorch-lightning','streamlit'] #during runtime
+requires = ['streamlit'] #during runtime
 tests_require=['pytest>=3.0'] #for testing
 
 PACKAGE_PATH = os.path.abspath(os.path.join(__file__, os.pardir))
