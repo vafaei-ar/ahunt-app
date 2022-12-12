@@ -9,7 +9,7 @@ logging.basicConfig(
     format='%(asctime)s %(message)s',
     datefmt='%Y/%m/%d %I:%M:%S %p',
     handlers=[
-        logging.FileHandler(resultsPath + '/LOGS.log', 'w'),
+        logging.FileHandler('./LOGS.log', 'w'),
         logging.StreamHandler(sys.stdout)
     ])
 LOGGER = logging.getLogger()
