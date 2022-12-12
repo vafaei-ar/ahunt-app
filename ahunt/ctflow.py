@@ -85,42 +85,41 @@ class ALServiceTFlow(ALServiceBase):
                             ).convert('RGB').resize((256,256))
                                    ) for i in train_imgs]
         train_labels = [i[1] for i in train_imgs]
+        train_images = np.array(train_images)
+        train_labels = np.array(train_labels)
+        print(train_images.shape,train_labels.shape)
+        y_train = tf.keras.utils.to_categorical(train_labels)
 
         valid_images = [np.array(
                         Image.open(
                             os.path.join(self.root_dir,i[0])
                             ).convert('RGB').resize((256,256))
                                    ) for i in valid_imgs]
-        valid_labels = [i[1] for i in valid_imgs]
-
-        train_images = np.array(train_images)
-        train_labels = np.array(train_labels)
-        valid_images = np.array(valid_images)
-        valid_labels = np.array(valid_labels)
+        if len(valid_images):
+            valid_labels = [i[1] for i in valid_imgs]
+            valid_images = np.array(valid_images)
+            valid_labels = np.array(valid_labels)
+            print(valid_images.shape,valid_labels.shape)
+            valid_labels = tf.keras.utils.to_categorical(valid_labels)
+            validation_data = (valid_images,valid_labels)
+        else:
+            validation_data = None
 
         # train_images = np.array(train_images)
         # if train_images.ndim==3:
         #     train_images = np.expand_dims(train_images,-1)
         # train_labels = np.array(train_labels)
-        print(train_images.shape,train_labels.shape)
-        print(valid_images.shape,valid_labels.shape)
 
         aug = ImageDataGenerator(rotation_range = 10,
                                 width_shift_range = 0.1,
                                 height_shift_range = 0.1,
                                 zoom_range = 0.2,
                                 fill_mode="nearest")
-
-        y_train = tf.keras.utils.to_categorical(train_labels)
-        valid_labels = tf.keras.utils.to_categorical(valid_labels)
-        if len(valid_images):
-            validation_data = (valid_images,valid_labels)
-        else:
-            validation_data = None
         n_class,class_labels, nums = describe_labels(y_train,verbose=1)
-        train_images,y_train = balance_aug(train_images,y_train)
+        train_images,y_train = balance_aug(train_images,y_train,aug=aug)
         n_class,class_labels, nums = describe_labels(y_train,verbose=1)
                 
+        train_data = self.aug.flow(train_images, y_train, batch_size=batch_size)
 
         loss = tf.keras.losses.CategoricalCrossentropy(from_logits=0)
         lr_schedule = tf.keras.optimizers.schedules.ExponentialDecay(
@@ -150,10 +149,10 @@ class ALServiceTFlow(ALServiceBase):
 
         epoch = 10
         for iepoch in range(epoch):
-            H = model.fit(train_images, y_train,
+            H = model.fit(train_data,
                         #   validation_split=0.1,
                           validation_data=validation_data,
-                          batch_size=batch_size,
+#                          batch_size=batch_size,
                           epochs=1,
                           verbose = 0,
                           callbacks=[MlflowCallback()])
