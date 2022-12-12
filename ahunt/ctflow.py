@@ -135,6 +135,8 @@ class ALServiceTFlow(ALServiceBase):
             st.sidebar.write('Model exists, loaded!')
             if n_class>model.output.shape[-1]:
                 model = add_class(clf = model,drt = encoder,n_class = n_class,summary=0)
+                st.write('new class added!')
+                st.write(model.summary())
         else:
             model,encoder,model_name = build_model(imodel=model_name,
                                                 shape=train_images.shape[1:],

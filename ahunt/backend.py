@@ -308,7 +308,7 @@ def next_question(df):
 def analysis(session_state):
     gt_path = st.text_input('Please Enter the path to the data directory.',
                               'GroundTruth.csv')
-    if st.sidebar.button('Analyze'):
+    if st.button('Analyze'):
         df_gt = pd.read_csv(gt_path)
         st.write(df_gt)
     
