@@ -66,7 +66,8 @@ class ALServiceTFlow(ALServiceBase):
             self.classes = cname_old+cname_diff
             self.class_to_idx = {j:i for i,j in enumerate(self.classes)}
             np.save(cidx_pat,self.classes)
-            LOGGER.info('old labels: '+cname_old+', new label(s)'+cname_diff)
+            LOGGER.info('old labels:',cname_old)
+            LOGGER.info('new label(s):',cname_diff)
         else:
             self.classes = dataframe['label'].dropna().unique().tolist()
             self.classes = sorted(self.classes)
