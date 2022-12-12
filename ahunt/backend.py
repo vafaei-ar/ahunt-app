@@ -196,7 +196,7 @@ def imageshow(session_state):
                 session_state.df.loc[image,'is_train'] = int(is_train)
                 session_state.df.to_csv(os.path.join(data_path,'als_files','labels.csv'))
                 # session_state.ishow = session_state.ishow+1
-                session_state.ishow = next_question(session_state.df)
+                session_state.ishow = next_question(session_state)
                 st.experimental_rerun()
                 
         with st.form("newclass"):
@@ -212,7 +212,7 @@ def imageshow(session_state):
                 session_state.df.loc[image,'is_train'] = 1.
                 session_state.df.to_csv(os.path.join(data_path,'als_files','labels.csv'),index=0)
                 # session_state.ishow = session_state.ishow+1
-                session_state.ishow = next_question(session_state.df)
+                session_state.ishow = next_question(session_state)
                 st.experimental_rerun()
     with col1:
         st.image(os.path.join(data_path,image))
@@ -289,7 +289,7 @@ def imageshow_label(session_state):
                 session_state.ishow = session_state.ishow-1
         with col2:
             if st.button('❓'):
-                session_state.ishow = next_question(session_state.df)
+                session_state.ishow = next_question(session_state)
                 # session_state.ishow = session_state.ishow+1
         with col3:
             if st.button('➡️'):
@@ -311,7 +311,8 @@ def imageshow_label(session_state):
         del session_state.ishow
         del session_state.df
 
-def next_question(df):
+def next_question(session_state):
+    df = session_state.df
     interest = session_state.interest
 
     if df['reserved'].isna().values.all():
