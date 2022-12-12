@@ -314,12 +314,12 @@ def imageshow_label(session_state):
 def next_question(session_state):
     df = session_state.df
     interest = session_state.interest
+    filt = df['label'].isna().values
 
     if df['reserved'].isna().values.all():
         ishow = np.argwhere(filt)[0][0]
         return ishow
 
-    filt = df['label'].isna().values
     index = df[filt][interest].sort_values().index[0]
     ishow = df.index.to_list().index(index)
     return ishow
