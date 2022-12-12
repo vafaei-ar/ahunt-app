@@ -26,8 +26,9 @@ def set_new_labels(session_state, default_labels='label1, label2, ...'):
             session_state.df.index.name = 'path'
             # session_state.df.set_index('images', drop=True, append=False, inplace=False, verify_integrity=True)
             session_state.labeler_config['labels'] = labels
-            os.remove(os.path.join(data_path,'als_files'))
-            os.makedirs(os.path.join(data_path,'als_files'), exist_ok=True)
+            alspath = os.path.join(data_path,'als_files')
+            if os.path.exists(alspath): os.remove(alspath)
+            os.makedirs(alspath) #, exist_ok=True)
             session_state.success = True
             st.experimental_rerun()
 
