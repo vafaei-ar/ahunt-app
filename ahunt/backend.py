@@ -251,13 +251,13 @@ def imageshow_label(session_state):
         session_state.als.train()
     ahunt_mod = st.sidebar.checkbox("Preferences", value=False)
     if ahunt_mod:
-        batch_size = st.sidebar.number_input('batch size', value=32)
-        epoch = st.sidebar.number_input('epoch', value=10)
-        autotrain = st.sidebar.checkbox("Autotrain", value=False)
+        batch_size = st.sidebar.number_input('batch size', value=session_state.als_config['batch_size'])
+        epoch = st.sidebar.number_input('epoch', value=session_state.als_config['epoch'])
+        autotrain = st.sidebar.checkbox("Autotrain", value=session_state.als_config['autotrain'])
         model_name = st.sidebar.selectbox(
             label = "Select the label?",
             options = MODEL_LIST,
-            index = 0,
+            index = MODEL_LIST.index(session_state.als_config['model_name']),
         )
         session_state.als_config['model_name'] = model_name
         session_state.als_config['batch_size'] = batch_size
