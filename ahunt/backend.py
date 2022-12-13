@@ -358,17 +358,19 @@ def analysis(session_state):
         df = df.rename(columns={'label': 'human_label'})
         df_gt = df_gt.join(df)
 
-        col1, col2 = st.columns([.5,1.])
+        col1, col2 = st.columns(2)
 
         predictions = df_gt['predict'].values
         ground_truth = df_gt['label'].values
         fig = confusion_matrix_figure(predictions, ground_truth)
+        col1.header("Prediction results")
         col1.pyplot(fig)
         
         df_gtp = df_gt.dropna()
         human_label = df_gtp['human_label'].values
         ground_truth = df_gtp['label'].values
         fig = confusion_matrix_figure(human_label, ground_truth, ylabel = 'human labels')
+        col1.header("Labelling results")
         col2.pyplot(fig)
 #        st.write(df_gt)
     
