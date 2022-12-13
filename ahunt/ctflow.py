@@ -99,6 +99,10 @@ class ALServiceTFlow(ALServiceBase):
                                    
         train_labels = [i[1] for i in train_imgs]
         n_class = len(np.unique(train_labels))+1
+        
+        print('NUMBER OF CLASSES ARE:',n_class)
+        print(train_labels)
+        
         train_images = np.array(train_images)/255.
         train_labels = np.array(train_labels)
         y_train = tf.keras.utils.to_categorical(train_labels,num_classes=n_class)
