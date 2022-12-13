@@ -92,29 +92,14 @@ class ALServiceTFlow(ALServiceBase):
         dfp = dataframe[dataframe['is_train']==0]
         valid_imgs = [(i,j) for i,j in zip(dfp.index,dfp['int_labels'])]
         
-        print(train_imgs,valid_imgs)
-        
         train_images = [np.array(
                         Image.open(
                             os.path.join(self.root_dir,i[0])
                             ).convert('RGB').resize((256,256))
                                    ) for i in train_imgs]
                                    
-        print(df['is_train'].sum())
-        print((df['is_train']==1).values.sum()) 
-#        print(train_filt.sum())              
-#        print('1: ',int_labels)
-#        print('2: ',self.imgs)
-        print('3: ',train_imgs)
-        print('4: ',[self.root_dir+i[0] for i in train_imgs])
-                                   
-                                                          
-                                   
         train_labels = [i[1] for i in train_imgs]
         n_class = len(np.unique(train_labels))+1
-        
-        print('NUMBER OF CLASSES ARE:',n_class)
-        print(train_labels)
         
         train_images = np.array(train_images)/255.
         train_labels = np.array(train_labels)
@@ -219,18 +204,10 @@ class ALServiceTFlow(ALServiceBase):
             # else:
             #     chart2.add_rows(df_lss)
         
-        
-        y_pred = model.predict(train_images)
-        print(np.argmax(y_pred,axis=1),np.argmax(y_train,axis=1))
-        
         model.save(model_path)
         encoder.save(model_path.replace('.tf','_encoder.tf'))
         mlflow.keras.log_model(model, model_name)
         mlflow.end_run()
-        # for in df.index:
-        #     chunk = 
-        #     l = [1,2,3,4,5,6,7,8,9,10]
-        #     batch_size = 3    
             
         progress_bar.progress(0/epoch)
         status_text.text('Preiction... {:4.2f}% complete.'.format(0/epoch))
@@ -246,17 +223,13 @@ class ALServiceTFlow(ALServiceBase):
                                 ).convert('RGB').resize((256,256))
                                     ) for j in chunk]
             
-            print([self.root_dir+j for j in chunk])
-            
-            
             all_images = np.array(all_images)/255.
             y_predp = model.predict(all_images)
-            print(np.argmax(y_predp,axis=1))
             y_pred.extend(list(y_predp))
 
             progress_bar.progress((i+1)/nimg)
             status_text.text('Preiction... {:4.2f}% complete.'.format(100*(i+1)/nimg))
-        print(np.argmax(y_pred,axis=1))
+
         progress_bar.progress(100)
         status_text.text('Preiction... {:4.2f}% complete.'.format(100))
         self.session.labeler_config['trained_model'] = True
