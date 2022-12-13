@@ -91,7 +91,8 @@ class ALServiceTFlow(ALServiceBase):
                             ).convert('RGB').resize((256,256))
                                    ) for i in train_imgs]
                                    
-                                   
+        print(df['is_train'].sum())
+        print((df['is_train']==1).values.sum())               
         print('1: ',int_labels)
         print('2: ',self.imgs)
         print('3: ',train_imgs)
