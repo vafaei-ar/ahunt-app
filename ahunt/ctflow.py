@@ -90,6 +90,13 @@ class ALServiceTFlow(ALServiceBase):
                             os.path.join(self.root_dir,i[0])
                             ).convert('RGB').resize((256,256))
                                    ) for i in train_imgs]
+                                   
+                                   
+                                   
+        print([self.root_dir+i[0] for i in train_imgs])
+                                   
+                                                          
+                                   
         train_labels = [i[1] for i in train_imgs]
         n_class = len(np.unique(train_labels))+1
         train_images = np.array(train_images)/255.
@@ -193,7 +200,11 @@ class ALServiceTFlow(ALServiceBase):
             #     st.markdown("<h4 style='text-align: center; color: Black;'>loss</h4>", unsafe_allow_html=True)
             # else:
             #     chart2.add_rows(df_lss)
-            
+        
+        
+        y_pred = model.predict(train_images)
+        print(np.argmax(y_pred,axis=1),np.argmax(y_train,axis=1))
+        
         model.save(model_path)
         encoder.save(model_path.replace('.tf','_encoder.tf'))
         mlflow.keras.log_model(model, model_name)
@@ -213,9 +224,13 @@ class ALServiceTFlow(ALServiceBase):
             
             all_images = [np.array(
                             Image.open(
-                                os.path.join(self.root_dir,i)
+                                os.path.join(self.root_dir,j)
                                 ).convert('RGB').resize((256,256))
-                                    ) for i in chunk]
+                                    ) for j in chunk]
+            
+            print([self.root_dir+j for j in chunk])
+            
+            
             all_images = np.array(all_images)/255.
             y_predp = model.predict(all_images)
             print(y_predp)
