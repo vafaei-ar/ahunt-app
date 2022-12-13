@@ -103,7 +103,7 @@ class ALServiceTFlow(ALServiceBase):
         print(df['is_train'].sum())
         print((df['is_train']==1).values.sum()) 
 #        print(train_filt.sum())              
-        print('1: ',int_labels)
+#        print('1: ',int_labels)
 #        print('2: ',self.imgs)
         print('3: ',train_imgs)
         print('4: ',[self.root_dir+i[0] for i in train_imgs])
