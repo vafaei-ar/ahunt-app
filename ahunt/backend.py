@@ -340,7 +340,7 @@ def confusion_matrix_figure(predictions, ground_truth, ylabel = "Predicted Class
     fig,ax = plt.subplots(figsize=(6, 6))
     
     # create heatmap
-    ax = sns.heatmap(matrix, annot=True, fmt="d",ax=ax)
+    ax = sns.heatmap(matrix, annot=True, fmt="d", ax=ax, cbar=False)
     
     # set x and y ticks
     ax.xaxis.set_ticklabels(labels)
