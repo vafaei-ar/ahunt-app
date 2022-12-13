@@ -218,11 +218,12 @@ class ALServiceTFlow(ALServiceBase):
                                     ) for i in chunk]
             all_images = np.array(all_images)
             y_predp = model.predict(all_images)
+            print(y_predp)
             y_pred.extend(list(y_predp))
 
             progress_bar.progress((i+1)/nimg)
             status_text.text('Preiction... {:4.2f}% complete.'.format(100*(i+1)/nimg))
-            
+        print(y_pred)
         progress_bar.progress(100)
         status_text.text('Preiction... {:4.2f}% complete.'.format(100))
         self.session.labeler_config['trained_model'] = True
