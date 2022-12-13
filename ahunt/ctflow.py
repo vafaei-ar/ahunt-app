@@ -227,17 +227,17 @@ class ALServiceTFlow(ALServiceBase):
         status_text.text('Preiction... {:4.2f}% complete.'.format(100))
         self.session.labeler_config['trained_model'] = True
         
-        y_pred = np.array(y_pred)
-        preds = np.argmax(y_pred,axis=1)
         classesp = ['reserved']+self.classes
+        y_pred = np.array(y_pred)
+        for i,cls in enumerate(classesp):
+            self.session.df[cls] = y_pred[:,i]
+
+        preds = np.argmax(y_pred,axis=1)
         y_pred_names = [classesp[i] for i in preds]
         self.session.df['predict'] = y_pred_names
 #        self.session.df['score'] = np.max(y_pred,axis=1)
-        
 #        self.session.df['reserved'] = y_pred[:,0]
 #        self.session.df['probability'] = [','.join([str(j) for j in i]) for i in y_pred]
-        for i,cls in enumerate(['reserved']+self.classes):
-            self.session.df[cls] = y_pred[:,i]
         
         self.session.df.to_csv(os.path.join(self.root_dir,'als_files','labels.csv'))
         st.sidebar.write('Done!')
