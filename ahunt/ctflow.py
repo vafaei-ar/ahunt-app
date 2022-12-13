@@ -33,13 +33,14 @@ class ALServiceTFlow(ALServiceBase):
         mlflow.set_tag("mlflow.runName", run_name)
         
         if not self.als_config:
-            self.als_config = {'batch_size':32,'autotrain':False,'model_name':'VGG19'}
+            self.als_config = {'batch_size':32,'epoch':10,'autotrain':False,'model_name':'VGG19'}
         
         # Set a batch of tags
         mlflow.set_tags(self.als_config)
 
         
         batch_size = self.als_config['batch_size']
+        epoch = self.als_config['epoch']
         autotrain = self.als_config['autotrain']
         model_name = self.als_config['model_name']
         checkpoints_dir = os.path.join(self.root_dir,'als_files','checkpoints')
@@ -166,7 +167,6 @@ class ALServiceTFlow(ALServiceBase):
         status_text = st.sidebar.empty()
         status_text.text('Training...')
 
-        epoch = 10
         for iepoch in range(epoch):
             H = model.fit(train_data,
                         #   validation_split=0.1,

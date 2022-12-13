@@ -137,7 +137,7 @@ def imageshow_setstate(session_state):
                                         st = None)
     else:
         from ahunt.ctflow import ALServiceTFlow
-        session_state.als_config = {'batch_size':32,'autotrain':False,'model_name':'ResNet50V2'}
+        session_state.als_config = {'batch_size':32,'epoch':10,'autotrain':False,'model_name':'ResNet50V2'}
         session_state.als = ALServiceTFlow(root_dir = data_path,
                                            csv_file = None,
                                            als_config = session_state.als_config,
@@ -246,12 +246,13 @@ def imageshow_label(session_state):
             )
     session_state.interest = interest
     if not session_state.als_config:
-        session_state.als_config = {'batch_size':32,'autotrain':False,'model_name':'VGG19'}
+        session_state.als_config = {'batch_size':32,'epoch':10,'autotrain':False,'model_name':'VGG19'}
     if st.sidebar.button('AL-service'):
         session_state.als.train()
     ahunt_mod = st.sidebar.checkbox("Preferences", value=False)
     if ahunt_mod:
         batch_size = st.sidebar.number_input('batch size', value=32)
+        epoch = st.sidebar.number_input('epoch', value=10)
         autotrain = st.sidebar.checkbox("Autotrain", value=False)
         model_name = st.sidebar.selectbox(
             label = "Select the label?",
@@ -260,6 +261,7 @@ def imageshow_label(session_state):
         )
         session_state.als_config['model_name'] = model_name
         session_state.als_config['batch_size'] = batch_size
+        session_state.als_config['epoch'] = epoch
         session_state.als_config['autotrain'] = autotrain
         
         if st.sidebar.button('apply'):
@@ -370,7 +372,7 @@ def analysis(session_state):
         human_label = df_gtp['human_label'].values
         ground_truth = df_gtp['label'].values
         fig = confusion_matrix_figure(human_label, ground_truth, ylabel = 'human labels')
-        col1.header("Labelling results")
+        col2.header("Labelling results")
         col2.pyplot(fig)
 #        st.write(df_gt)
     
