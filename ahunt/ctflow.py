@@ -149,11 +149,12 @@ class ALServiceTFlow(ALServiceBase):
                                                 shape=train_images.shape[1:],
                                                 n_class = n_class,
                                                 n_latent=16,
-                                                comp=False)
+                                                comp=False,
+                                                decision_activation = "none")
 
-        loss = tf.keras.losses.CategoricalCrossentropy(from_logits=0)
+        loss = tf.keras.losses.CategoricalCrossentropy(from_logits=True)
         lr_schedule = tf.keras.optimizers.schedules.ExponentialDecay(
-                                    initial_learning_rate=1e-3,
+                                    initial_learning_rate=1e-5,
                                     decay_steps=5,
                                     decay_rate=0.95)
         opt = tf.keras.optimizers.Adam(learning_rate=lr_schedule)
@@ -307,7 +308,7 @@ def balance_aug(x0,y0,aug=None,mixup=False):
     return x,y
 
 # ## Build the model
-def build_model(imodel,shape, n_class, n_latent=16,comp=True):
+def build_model(imodel,shape, n_class, n_latent=16,comp=True, decision_activation = "softmax"):
     tf.keras.backend.clear_session()
 
     if False:#imodel>=100:
@@ -373,7 +374,7 @@ def build_model(imodel,shape, n_class, n_latent=16,comp=True):
     #     headModel = tf.keras.layers.Flatten(name="flatten")(headModel)
         encoded = tf.keras.layers.Dense(n_latent, activation="relu")(headModel)
         xl = tf.keras.layers.Dropout(0.5)(encoded)
-        output = tf.keras.layers.Dense(n_class, activation="softmax")(xl)
+        output = tf.keras.layers.Dense(n_class, activation=decision_activation)(xl)
         # place the head FC model on top of the base model (this will become
         # the actual model we will train)
         encoder = keras.models.Model(inputs=inputs, outputs=encoded)
