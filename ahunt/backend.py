@@ -356,7 +356,7 @@ def analysis(session_state):
         df_gt = pd.read_csv(gt_path).set_index('image')
         df = session_state.df[['predict']]
         st.write(df)
-        df_gt = gt_path.join(df)
+        df_gt = df_gt.join(df)
         st.write(df_gt)
         
         
