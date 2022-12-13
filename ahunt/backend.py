@@ -328,7 +328,7 @@ def next_question(session_state):
 import seaborn as sns
 from sklearn.metrics import confusion_matrix
 
-def confusion_matrix_figure(predictions, ground_truth):
+def confusion_matrix_figure(predictions, ground_truth, ylabel = "Predicted Class"):
     # create confusion matrix
     labels = list(set(ground_truth))
     
@@ -345,7 +345,7 @@ def confusion_matrix_figure(predictions, ground_truth):
     ax.yaxis.set_ticklabels(labels)
     
     # set labels
-    ax.set_ylabel("Predicted Class")
+    ax.set_ylabel(ylabel)
     ax.set_xlabel("Ground Truth")
     return fig
 
@@ -354,12 +354,17 @@ def analysis(session_state):
                               'GroundTruth.csv')
     if st.button('Analyze'):   
         df_gt = pd.read_csv(gt_path).set_index('image')
-        df = session_state.df[['predict']]
+        df = session_state.df[['label','predict']]
+        df = df.rename(columns={'label': 'human_label'})
         df_gt = df_gt.join(df)
+
         predictions = df_gt['predict'].values
         ground_truth = df_gt['label'].values
-        # generate confusion matrix figure
         fig = confusion_matrix_figure(predictions, ground_truth)
+        
+        human_label = df_gt['human_label'].values
+        fig = confusion_matrix_figure(human_label, ground_truth, ylabel = 'human labels')
+        
         st.pyplot(fig)
 #        st.write(df_gt)
     
