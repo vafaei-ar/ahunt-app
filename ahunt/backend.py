@@ -355,7 +355,11 @@ def analysis(session_state):
     if st.button('Analyze'):   
         df_gt = pd.read_csv(gt_path).set_index('image')
         df = session_state.df[['predict']]
+        st.write(df)
         gt_path = gt_path.join(df)
+        st.write(df_gt)
+        
+        
         predictions = gt_path['predict'].values
         ground_truth = gt_path['label'].values
         # generate confusion matrix figure
