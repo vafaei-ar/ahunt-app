@@ -324,15 +324,43 @@ def next_question(session_state):
     ishow = df.index.to_list().index(index)
     return ishow
 
+
+import seaborn as sns
+from sklearn.metrics import confusion_matrix
+
+def confusion_matrix_figure(predictions, ground_truth):
+    # create confusion matrix
+    labels = list(set(ground_truth))
+    
+    matrix = confusion_matrix(predictions, ground_truth,labels=labels)
+
+    # create figure
+    fig,ax = plt.subplots(figsize=(6, 6))
+    
+    # create heatmap
+    ax = sns.heatmap(matrix, annot=True, fmt="d",ax=ax)
+    
+    # set x and y ticks
+    ax.xaxis.set_ticklabels(labels)
+    ax.yaxis.set_ticklabels(labels)
+    
+    # set labels
+    ax.set_ylabel("Predicted Class")
+    ax.set_xlabel("Ground Truth")
+    return fig
+
 def analysis(session_state):
     gt_path = st.text_input('Please Enter the path to the data directory.',
-                              'GroundTruth.csv').set_index('image')
+                              'GroundTruth.csv')
     if st.button('Analyze'):   
-        df_gt = pd.read_csv(gt_path)
+        df_gt = pd.read_csv(gt_path).set_index('image')
         df = session_state.df[['predict']]
-        
         gt_path = gt_path.join(df)
-        
+        predictions = gt_path['predict'].values
+        ground_truth = gt_path['label'].values
+        # generate confusion matrix figure
+        fig = confusion_matrix_figure(predictions, ground_truth)
+        st.pyplot(fig)
         st.write(df_gt)
     
 

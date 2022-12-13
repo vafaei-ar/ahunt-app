@@ -274,6 +274,13 @@ class ALServiceTFlow(ALServiceBase):
 #        self.session.df['probability'] = [','.join([str(j) for j in i]) for i in y_pred]
         
         self.session.df.to_csv(os.path.join(self.root_dir,'als_files','labels.csv'))
+        
+        # Converting datetime stamped backup of the predictions
+        dateTimeObj = datetime.now()
+        timestampStr = dateTimeObj.strftime("%d-%b-%Y_(%H:%M:%S.%f)")
+        timestamppath = os.path.join(self.root_dir,'als_files','checkpoints',f'labels_{model_name}_{timestampStr}.csv')
+        self.session.df.to_csv(timestamppath)
+        
         st.sidebar.write('Done!')
 
 
