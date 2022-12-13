@@ -326,9 +326,13 @@ def next_question(session_state):
 
 def analysis(session_state):
     gt_path = st.text_input('Please Enter the path to the data directory.',
-                              'GroundTruth.csv')
-    if st.button('Analyze'):
+                              'GroundTruth.csv').set_index('image')
+    if st.button('Analyze'):   
         df_gt = pd.read_csv(gt_path)
+        df = session_state.df[['predict']]
+        
+        gt_path = gt_path.join(df)
+        
         st.write(df_gt)
     
 
