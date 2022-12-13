@@ -92,7 +92,7 @@ class ALServiceTFlow(ALServiceBase):
                                    ) for i in train_imgs]
         train_labels = [i[1] for i in train_imgs]
         n_class = len(np.unique(train_labels))+1
-        train_images = np.array(train_images)
+        train_images = np.array(train_images)/255.
         train_labels = np.array(train_labels)
         y_train = tf.keras.utils.to_categorical(train_labels,num_classes=n_class)
         print(train_images.shape,y_train.shape,train_labels.shape)
@@ -113,7 +113,7 @@ class ALServiceTFlow(ALServiceBase):
                                    ) for i in valid_imgs]
         if len(valid_images):
             valid_labels = [i[1] for i in valid_imgs]
-            valid_images = np.array(valid_images)
+            valid_images = np.array(valid_images)/255.
             valid_labels = np.array(valid_labels)
             valid_labels = tf.keras.utils.to_categorical(valid_labels,num_classes=n_class)
             print(valid_images.shape,valid_labels.shape)
@@ -216,7 +216,7 @@ class ALServiceTFlow(ALServiceBase):
                                 os.path.join(self.root_dir,i)
                                 ).convert('RGB').resize((256,256))
                                     ) for i in chunk]
-            all_images = np.array(all_images)
+            all_images = np.array(all_images)/255.
             y_predp = model.predict(all_images)
             print(y_predp)
             y_pred.extend(list(y_predp))
