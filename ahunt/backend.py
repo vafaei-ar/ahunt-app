@@ -356,12 +356,12 @@ def analysis(session_state):
         df_gt = pd.read_csv(gt_path).set_index('image')
         df = session_state.df[['predict']]
         st.write(df)
-        gt_path = gt_path.join(df)
+        df_gt = gt_path.join(df)
         st.write(df_gt)
         
         
-        predictions = gt_path['predict'].values
-        ground_truth = gt_path['label'].values
+        predictions = df_gt['predict'].values
+        ground_truth = df_gt['label'].values
         # generate confusion matrix figure
         fig = confusion_matrix_figure(predictions, ground_truth)
         st.pyplot(fig)
