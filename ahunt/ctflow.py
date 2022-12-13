@@ -82,11 +82,13 @@ class ALServiceTFlow(ALServiceBase):
 #        valid_filt = (df['is_train']==0).values
         self.imgs = [(i,j) for i,j in zip(dataframe.index,int_labels)]
         
-        train_imgs = [j for i,j in enumerate(self.imgs) if train_filt[i]] #self.imgs[train_filt]
-        valid_imgs = [j for i,j in enumerate(self.imgs) if valid_filt[i]] #self.imgs[valid_filt]
+#        train_imgs = [j for i,j in enumerate(self.imgs) if train_filt[i]] #self.imgs[train_filt]
+#        valid_imgs = [j for i,j in enumerate(self.imgs) if valid_filt[i]] #self.imgs[valid_filt]
         
+        train_imgs = dataframe[dataframe['is_train']==1].index.tolist()
+        valid_imgs = dataframe[dataframe['is_train']==0].index.tolist()
         
-        print(dataframe[dataframe['is_train']==1].index.tolist()
+        print(train_imgs,valid_imgs)
         
         train_images = [np.array(
                         Image.open(
