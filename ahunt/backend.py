@@ -360,7 +360,7 @@ def analysis(session_state):
         df = df.rename(columns={'label': 'human_label'})
         df_gt = df_gt.join(df)
 
-        col1, col2 = st.columns(2)
+        col1, col2 = st.columns([1.,1.])
 
         predictions = df_gt['predict'].values
         ground_truth = df_gt['label'].values
