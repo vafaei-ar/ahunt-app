@@ -78,12 +78,15 @@ class ALServiceTFlow(ALServiceBase):
         LOGGER.info(self.class_to_idx)
         
         int_labels = dataframe['label'].apply(lambda i:self.class_to_idx[i]).values
-        train_filt = (df['is_train']==1).values
-        valid_filt = (df['is_train']==0).values
+#        train_filt = (df['is_train']==1).values
+#        valid_filt = (df['is_train']==0).values
         self.imgs = [(i,j) for i,j in zip(dataframe.index,int_labels)]
         
         train_imgs = [j for i,j in enumerate(self.imgs) if train_filt[i]] #self.imgs[train_filt]
         valid_imgs = [j for i,j in enumerate(self.imgs) if valid_filt[i]] #self.imgs[valid_filt]
+        
+        
+        print(dataframe[dataframe['is_train']==1].index.tolist()
         
         train_images = [np.array(
                         Image.open(
@@ -92,7 +95,8 @@ class ALServiceTFlow(ALServiceBase):
                                    ) for i in train_imgs]
                                    
         print(df['is_train'].sum())
-        print((df['is_train']==1).values.sum())               
+        print((df['is_train']==1).values.sum()) 
+        print(train_filt.sum())              
         print('1: ',int_labels)
         print('2: ',self.imgs)
         print('3: ',train_imgs)
