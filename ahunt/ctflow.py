@@ -67,8 +67,8 @@ class ALServiceTFlow(ALServiceBase):
             # i=0 is for reserved class
             self.class_to_idx = {j:i+1 for i,j in enumerate(self.classes)}
             np.save(cidx_pat,self.classes)
-            LOGGER.info('old labels:'+','.join(cname_old))
-            LOGGER.info('new label(s):'+','.join(cname_diff))
+            LOGGER.info('old labels: '+','.join(cname_old))
+            LOGGER.info('new label(s): '+','.join(cname_diff))
         else:
             self.classes = dataframe['label'].dropna().unique().tolist()
             self.classes = sorted(self.classes)
@@ -266,13 +266,13 @@ def balance_aug(x0,y0,aug=None,mixup=False):
     n_class,class_labels, nums = describe_labels(y,verbose=0)
     nmax = max(nums)
     for i,(lbl,n0) in enumerate(zip(class_labels,nums)):
-        if nmax==n0:
-            continue
+        if nmax==n0: continue
+        if n0==0: continue
         delta = nmax-n0
         if y.ndim==1:
             filt = y==lbl
         elif y.ndim==2:
-            filt = y[:,i].astype(bool)
+            filt = y[:,lbl].astype(bool)
         else:
             assert 0,'Unknown label shape!'
         x_sub = x[filt]
