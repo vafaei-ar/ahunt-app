@@ -80,7 +80,7 @@ class ALServiceTFlow(ALServiceBase):
         dataframe['int_labels'] = dataframe['label'].apply(lambda i:self.class_to_idx[i]).values
 #        train_filt = (df['is_train']==1).values
 #        valid_filt = (df['is_train']==0).values
-        self.imgs = [(i,j) for i,j in zip(dataframe.index,int_labels)]
+#        self.imgs = [(i,j) for i,j in zip(dataframe.index,int_labels)]
         
 #        train_imgs = [j for i,j in enumerate(self.imgs) if train_filt[i]] #self.imgs[train_filt]
 #        valid_imgs = [j for i,j in enumerate(self.imgs) if valid_filt[i]] #self.imgs[valid_filt]
