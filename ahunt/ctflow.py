@@ -92,8 +92,10 @@ class ALServiceTFlow(ALServiceBase):
                                    ) for i in train_imgs]
                                    
                                    
-                                   
-        print([self.root_dir+i[0] for i in train_imgs])
+        print('1: ',int_labels)
+        print('2: ',self.imgs)
+        print('3: ',train_imgs)
+        print('4: ',[self.root_dir+i[0] for i in train_imgs])
                                    
                                                           
                                    
