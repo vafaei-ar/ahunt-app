@@ -246,7 +246,7 @@ def imageshow_label(session_state):
             )
     session_state.interest = interest
     if not session_state.als_config:
-        session_state.als_config = {'batch_size':32,'epoch':10,'autotrain':False,'model_name':'VGG19'}
+        session_state.als_config = {'batch_size':32,'epoch':10,'autotrain':False,'model_name':'ResNet50V2'}
     if st.sidebar.button('AL-service'):
         session_state.als.train()
     ahunt_mod = st.sidebar.checkbox("Preferences", value=False)
