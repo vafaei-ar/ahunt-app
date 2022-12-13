@@ -150,7 +150,7 @@ class ALServiceTFlow(ALServiceBase):
                                                 n_class = n_class,
                                                 n_latent=16,
                                                 comp=False,
-                                                decision_activation = "none")
+                                                decision_activation = "linear")
 
         loss = tf.keras.losses.CategoricalCrossentropy(from_logits=True)
         lr_schedule = tf.keras.optimizers.schedules.ExponentialDecay(
