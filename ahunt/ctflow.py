@@ -205,6 +205,7 @@ class ALServiceTFlow(ALServiceBase):
             #     chart2.add_rows(df_lss)
         
         model.save(model_path)
+        self.model = model
         encoder.save(model_path.replace('.tf','_encoder.tf'))
         mlflow.keras.log_model(model, model_name)
         mlflow.end_run()
@@ -256,6 +257,26 @@ class ALServiceTFlow(ALServiceBase):
         
         st.sidebar.write('Done!')
 
+    def saliancy(self,img_path,method='gradcam'):
+        import ktrans as ktr
+        methods = {
+            'vanilla_saliency':ktr.vanilla_saliency,
+            'smoothgrad':ktr.smoothgrad,
+            'gradcam':ktr.gradcam,
+            'gradcampp':ktr.gradcampp,
+            'scorecam':ktr.scorecam
+        }
+        img = np.array(Image.open(img_path
+                                 ).convert('RGB').resize((256,256))
+                      )/255.
+        class_id = self.model.predict(img[None])
+        class_id = np.argmax(class_id,axis=1)[0]
+        smap = methods[method](img,self.model,class_id=class_id)
+        fig,ax = plt.subplots(1,1,figsize=(4,4))   
+        ax.imshow(np.mean(img,axis=0))
+        ax.imshow(np.mean(smap,axis=0),cmap='jet',alpha=0.5)
+        
+        return fig,ax,smap
 
 def describe_labels(y0,verbose=0):
     y = y0+0

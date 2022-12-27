@@ -215,7 +215,13 @@ def imageshow(session_state):
                 session_state.ishow = next_question(session_state)
                 st.experimental_rerun()
     with col1:
-        st.image(os.path.join(data_path,image))
+        img_path = os.path.join(data_path,image)
+        if st.checkbox('Attention map'):
+            session_state.als.saliancy(
+                        img_path = os.path.join(data_path,image),
+                        method='gradcam')
+        else:
+            st.image(img_path)
         st.write(image)
         st.write(f'Label: {label}, Prediction: {predic}')
         # print(image)
