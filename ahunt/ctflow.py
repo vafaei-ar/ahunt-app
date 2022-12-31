@@ -366,7 +366,7 @@ class ALServiceTFlow(ALServiceBase):
         ax.imshow(img)
         heatmap = np.uint8(cm.jet(heatmap[0])[..., :3] * 255)
         ax.imshow(heatmap, cmap='jet', alpha=0.5) # overlay
-
+        ax.axis('off')
         # smap = methods[method](img,self.model,class_id=class_id)
         # ax.imshow(np.mean(img,axis=0))
         # ax.imshow(np.mean(smap,axis=0),cmap='jet',alpha=0.5)
