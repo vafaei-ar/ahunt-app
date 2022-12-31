@@ -259,6 +259,7 @@ class ALServiceTFlow(ALServiceBase):
 
     def saliancy(self,img_path,method):
         # import ktrans as ktr
+        import pylab as plt
         from matplotlib import cm
         from tf_keras_vis.utils.model_modifiers import ReplaceToLinear
         from tf_keras_vis.utils.scores import CategoricalScore
