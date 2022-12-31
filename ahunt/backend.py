@@ -216,10 +216,20 @@ def imageshow(session_state):
                 st.experimental_rerun()
     with col1:
         img_path = os.path.join(data_path,image)
-        if st.checkbox('Attention map'):
-            session_state.als.saliancy(
+        if st.checkbox('Attention map') and hasattr(session_state.als,'model'):
+            methods = ['Saliency','Smoothed Saliency',
+                    'Gradcam','GradCAM++','ScoreCAM',
+                    'Faster ScoreCAM','Layercam']
+            mothod = st.sidebar.selectbox(
+                        label = "Set the attention method",
+                        options = methods,
+                        index = 5,
+                        # key = '10001'
+                    )
+            fig,ax = session_state.als.saliancy(
                         img_path = os.path.join(data_path,image),
-                        method='gradcam')
+                        method=mothod)
+            
         else:
             st.image(img_path)
         st.write(image)

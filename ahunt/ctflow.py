@@ -257,26 +257,108 @@ class ALServiceTFlow(ALServiceBase):
         
         st.sidebar.write('Done!')
 
-    def saliancy(self,img_path,method='gradcam'):
-        import ktrans as ktr
-        methods = {
-            'vanilla_saliency':ktr.vanilla_saliency,
-            'smoothgrad':ktr.smoothgrad,
-            'gradcam':ktr.gradcam,
-            'gradcampp':ktr.gradcampp,
-            'scorecam':ktr.scorecam
-        }
+    def saliancy(self,img_path,method):
+        # import ktrans as ktr
+        from matplotlib import cm
+        from tf_keras_vis.utils.model_modifiers import ReplaceToLinear
+        from tf_keras_vis.utils.scores import CategoricalScore
+        from tf_keras_vis.saliency import Saliency
+        from tf_keras_vis.gradcam import Gradcam
+        from tf_keras_vis.gradcam_plus_plus import GradcamPlusPlus
+        from tf_keras_vis.scorecam import Scorecam
+        from tf_keras_vis.layercam import Layercam
+
+        model = self.model
+
         img = np.array(Image.open(img_path
                                  ).convert('RGB').resize((256,256))
                       )/255.
-        class_id = self.model.predict(img[None])
+        X = img[None]
+        class_id = model.predict(X)
         class_id = np.argmax(class_id,axis=1)[0]
-        smap = methods[method](img,self.model,class_id=class_id)
-        fig,ax = plt.subplots(1,1,figsize=(4,4))   
-        ax.imshow(np.mean(img,axis=0))
-        ax.imshow(np.mean(smap,axis=0),cmap='jet',alpha=0.5)
+
+        replace2linear = ReplaceToLinear()
+
+        # Instead of using the ReplaceToLinear instance above,
+        # you can also define the function from scratch as follows:
+        # def model_modifier_function(cloned_model):
+        #     cloned_model.layers[-1].activation = tf.keras.activations.linear
+        # OR THIS WAS THE OLD VERSION OF MINE
+        # def model_modifier(m):
+        #     m.layers[-1].activation = linear
+        #     return m
+
+        # from tf_keras_vis.utils.scores import CategoricalScore
+        # 1 is the imagenet index corresponding to Goldfish, 294 to Bear and 413 to Assault Rifle.
+        # score = CategoricalScore([1, 294, 413])
+        # # Instead of using CategoricalScore object,
+        # # you can also define the function from scratch as follows:
+        # def score_function(output):
+        #     # The `output` variable refers to the output of the model,
+        #     # so, in this case, `output` shape is `(3, 1000)` i.e., (samples, classes).
+        #     return (output[0][1], output[1][294], output[2][413])
+
+        # def score(i):
+        #     def loss(output):
+        #         return output[:,i]
+        #     return loss
+
+        def score(output):
+            return output[:,class_id]
+
+        if 'Saliency' in mothod:
+            # Create Saliency object.
+            saliency = Saliency(model,
+                                model_modifier=replace2linear,
+                                clone=True)
+            if mothod=='Saliency':
+                # Generate saliency map
+                saliency_map = saliency(score, X)
+                st.s
+            if mothod=='Smoothed Saliency':
+                # Generate saliency map with smoothing that reduce noise by adding noise
+                heatmap = saliency(score,X,
+                                   smooth_samples=20, # The number of calculating gradients iterations.
+                                   smooth_noise=0.20) # noise spread level.
+
+        if mothod=='Gradcam':
+            # Create Gradcam object
+            gradcam = Gradcam(model,model_modifier=replace2linear,clone=True)
+            # Generate heatmap with GradCAM
+            heatmap = gradcam(score,X,penultimate_layer=-1)
+
+        if mothod=='GradCAM++':
+            # Create GradCAM++ object
+            gradcam = GradcamPlusPlus(model,model_modifier=replace2linear,clone=True)
+            # Generate heatmap with GradCAM++
+            heatmap = gradcam(score,X,penultimate_layer=-1)
+
+        if 'ScoreCAM' in mothod:
+            # Create ScoreCAM object
+            scorecam = Scorecam(model)
+            if mothod=='ScoreCAM':
+                # Generate heatmap with ScoreCAM
+                heatmap = scorecam(score, X, penultimate_layer=-1)
+            if mothod=='Faster ScoreCAM':
+                # Generate heatmap with Faster-ScoreCAM
+                heatmap = scorecam(score,X,penultimate_layer=-1,max_N=10)
+
+        if mothod=='Layercam':
+            layercam = Layercam(model,model_modifier=replace2linear,clone=True)
+            # Generate heatmap with Layercam
+            heatmap = layercam(score,X,penultimate_layer=-1)
+
+        fig,ax = plt.subplots(1,1,figsize=(4,4))
+        img = np.uint8(img * 255)
+        ax.imshow(img)
+        heatmap = np.uint8(cm.jet(heatmap[0])[..., :3] * 255)
+        ax.imshow(heatmap, cmap='jet', alpha=0.5) # overlay
+
+        # smap = methods[method](img,self.model,class_id=class_id)
+        # ax.imshow(np.mean(img,axis=0))
+        # ax.imshow(np.mean(smap,axis=0),cmap='jet',alpha=0.5)
         
-        return fig,ax,smap
+        return fig,ax
 
 def describe_labels(y0,verbose=0):
     y = y0+0
