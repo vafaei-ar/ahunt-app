@@ -306,44 +306,44 @@ class ALServiceTFlow(ALServiceBase):
         def score(output):
             return output[:,class_id]
 
-        if 'Saliency' in mothod:
+        if 'Saliency' in method:
             # Create Saliency object.
             saliency = Saliency(model,
                                 model_modifier=replace2linear,
                                 clone=True)
-            if mothod=='Saliency':
+            if method=='Saliency':
                 # Generate saliency map
                 saliency_map = saliency(score, X)
                 st.s
-            if mothod=='Smoothed Saliency':
+            if method=='Smoothed Saliency':
                 # Generate saliency map with smoothing that reduce noise by adding noise
                 heatmap = saliency(score,X,
                                    smooth_samples=20, # The number of calculating gradients iterations.
                                    smooth_noise=0.20) # noise spread level.
 
-        if mothod=='Gradcam':
+        if method=='Gradcam':
             # Create Gradcam object
             gradcam = Gradcam(model,model_modifier=replace2linear,clone=True)
             # Generate heatmap with GradCAM
             heatmap = gradcam(score,X,penultimate_layer=-1)
 
-        if mothod=='GradCAM++':
+        if method=='GradCAM++':
             # Create GradCAM++ object
             gradcam = GradcamPlusPlus(model,model_modifier=replace2linear,clone=True)
             # Generate heatmap with GradCAM++
             heatmap = gradcam(score,X,penultimate_layer=-1)
 
-        if 'ScoreCAM' in mothod:
+        if 'ScoreCAM' in method:
             # Create ScoreCAM object
             scorecam = Scorecam(model)
-            if mothod=='ScoreCAM':
+            if method=='ScoreCAM':
                 # Generate heatmap with ScoreCAM
                 heatmap = scorecam(score, X, penultimate_layer=-1)
-            if mothod=='Faster ScoreCAM':
+            if method=='Faster ScoreCAM':
                 # Generate heatmap with Faster-ScoreCAM
                 heatmap = scorecam(score,X,penultimate_layer=-1,max_N=10)
 
-        if mothod=='Layercam':
+        if method=='Layercam':
             layercam = Layercam(model,model_modifier=replace2linear,clone=True)
             # Generate heatmap with Layercam
             heatmap = layercam(score,X,penultimate_layer=-1)
