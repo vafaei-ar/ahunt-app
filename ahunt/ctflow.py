@@ -327,7 +327,6 @@ class ALServiceTFlow(ALServiceBase):
             if method=='Saliency':
                 # Generate saliency map
                 saliency_map = saliency(score, X)
-                st.s
             if method=='Smoothed Saliency':
                 # Generate saliency map with smoothing that reduce noise by adding noise
                 heatmap = saliency(score,X,
