@@ -26,6 +26,18 @@ from ahunt.utils import LOGGER
 
 class ALServiceTFlow(ALServiceBase):
 
+    def __init__(self,root_dir,csv_file=None,als_config = None, session=None,st=None):
+        super().__init__(root_dir,
+                        csv_file = csv_file,
+                        als_config = als_config,
+                        session = session,
+                        st = st)
+        checkpoints_dir = os.path.join(self.root_dir,'als_files','checkpoints')
+        model_name = self.als_config['model_name']
+        model_path = os.path.join(checkpoints_dir,model_name+'.tf')
+        if os.path.exists(model_path):
+            self.model = keras.models.load_model(model_path)
+
     def train(self):
         
         mlflow.start_run()

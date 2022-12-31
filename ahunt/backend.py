@@ -229,7 +229,7 @@ def imageshow(session_state):
             fig,ax = session_state.als.saliancy(
                         img_path = os.path.join(data_path,image),
                         method=mothod)
-            
+            st.pyplot(fig=fig)
         else:
             st.image(img_path)
         st.write(image)
