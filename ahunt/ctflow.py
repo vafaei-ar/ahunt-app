@@ -26,13 +26,13 @@ from ahunt.utils import LOGGER
 
 class ALServiceTFlow(ALServiceBase):
 
-    def __init__(self,root_dir,csv_file=None,als_config = None, session=None,st=None):
-        super().__init__(root_dir,
-                        csv_file = csv_file,
-                        als_config = als_config,
-                        session = session,
-                        st = st)
-        self.resume()
+    # def __init__(self,root_dir,csv_file=None,als_config = None, session=None,st=None):
+    #     super().__init__(root_dir,
+    #                     csv_file = csv_file,
+    #                     als_config = als_config,
+    #                     session = session,
+    #                     st = st)
+    #     self.resume()
 
     def resume(self):
         checkpoints_dir = os.path.join(self.root_dir,'als_files','checkpoints')

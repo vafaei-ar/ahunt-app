@@ -9,9 +9,7 @@ class ALServiceBase:
         self.csv_file = csv_file
         if st: self.st = st
         if session: self.session = session
-
-        # TODO
-        # add self.resume() here and remove from ctflow
+        self.resume()
 
     def test(self):
         pass
