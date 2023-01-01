@@ -10,6 +10,9 @@ class ALServiceBase:
         if st: self.st = st
         if session: self.session = session
 
+        # TODO
+        # add self.resume() here and remove from ctflow
+
     def test(self):
         pass
     
@@ -21,3 +24,6 @@ class ALServiceBase:
         
     def __str__(self):
         return str(self.als_config)
+
+    def resume(self):
+        pass

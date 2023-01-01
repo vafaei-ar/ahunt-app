@@ -32,6 +32,9 @@ class ALServiceTFlow(ALServiceBase):
                         als_config = als_config,
                         session = session,
                         st = st)
+        self.resume()
+
+    def resume(self):
         checkpoints_dir = os.path.join(self.root_dir,'als_files','checkpoints')
         model_name = self.als_config['model_name']
         model_path = os.path.join(checkpoints_dir,model_name+'.tf')
