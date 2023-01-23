@@ -231,7 +231,7 @@ def imageshow(session_state):
                         method=mothod)
             st.pyplot(fig=fig)
         else:
-            st.image(img_path)
+            st.image(img_path,use_column_width=True)
         st.write(image)
         st.write(f'Label: {label}, Prediction: {predic}')
         # print(image)
